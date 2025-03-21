@@ -536,7 +536,7 @@
           date: "03-06",
         },
       ];
-      const default_time = " 00:00:00";
+      const default_time = "T00:00:00";
       let img_x_position = -1464; // 初期x座標
       let img_y_position = 0; // 初期x座標
       const img_x_size = 4392; // 画像サイズ
@@ -569,7 +569,7 @@
         const birthday = document.getElementById("birthday").value;
         const birth = FromDate(birthday + default_time);
         const medical = Medical(birthday);
-        const amount = -birth + medical - 89;
+        const amount = medical - birth - 455;
         console.log(amount, birth, medical);
         Move(amount * 4 + canvas_half);
       };
@@ -579,7 +579,7 @@
         const birthday_year = birthday.getFullYear();
         const date = medical_data.find(({ year }) => year === birthday_year);
         if (date) {
-          const days = FromDate(date.date + default_time);
+          const days = FromDate("2024-" + date.date + default_time);
           return days;
         }
       };
@@ -594,7 +594,7 @@
       const FromDate = (date) => {
         const birthday = new Date(date);
         const new_years_day = new Date(
-          `${birthday.getFullYear()}-01-01 ${default_time}`
+          `${birthday.getFullYear()}-01-01${default_time}`
         );
         return (birthday - new_years_day) / 86400000;
       };
