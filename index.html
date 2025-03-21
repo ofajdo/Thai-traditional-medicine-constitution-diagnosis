@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      canvas {
+        border: none;
+      }
+    </style>
+    <title>タイ伝統医学体質診断</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <div class="app-display">
+      <div class="app-display-main" id="app_image_content">
+        <canvas id="app_canvas" width="100" height="200"></canvas>
+        <input type="date" id="birthday" />
+        <button onclick="DrawImage();">ロード</button>
+        <button onclick="Execution();">実行</button>
+      </div>
+    </div>
+
+    <script>
+      // SVGデータ
+      const svg_data = `<?xml version="1.0" encoding="UTF-8"?>
+        <svg id="svg1" width="1098" height="50" version="1.1" viewBox="0 0 290.51 13.229" xmlns="http://www.w3.org/2000/svg"><g id="g16" transform="matrix(1 0 0 .99831 -.00040779 -1.1844e-7)" stroke="#2c2c2d"><g id="g15" transform="matrix(1 0 0 1 .0004078 -9.2981e-8)"><g id="g14" transform="matrix(1 0 0 -1.0016 -.0018766 13.251)" stroke-width=".1316"><g fill="#ed88b4"><rect id="rect2-8" transform="scale(-1,1)" x="-103.04" y="3.3398" width="6.1839" height="3.2745"/><rect id="rect2-8-5" transform="scale(-1,1)" x="-118.37" y="3.3398" width="4.8395" height="3.2745"/><rect id="rect2-8-03" transform="scale(-1,1)" x="-108.15" y="6.6142" width="11.292" height="3.2745"/></g><g fill="#e76d2c"><rect id="rect2-8-0" x="103.04" y="3.3398" width="5.1085" height="3.2745"/><rect id="rect2-8-0-2" x="118.37" y="3.3398" width="4.8395" height="3.2745"/><rect id="rect2-8-0-1" transform="scale(-1,1)" x="-118.37" y="6.6142" width="10.216" height="3.2745"/></g><rect id="rect1" x="96.858" y=".065364" width="31.725" height="3.2745" fill="#c4431d"/><rect id="rect1-8" transform="scale(-1,1)" x="-121.59" y="9.8889" width="23.66" height="3.2745" fill="#c4431d"/><rect id="rect1-0" transform="scale(-1,1)" x="-97.934" y="9.8889" width="1.0754" height="3.2745" fill="#2c2c2d"/><rect id="rect1-0-7" x="169.18" y="9.8889" width="24.466" height="3.2744" fill="#2c2c2d"/><g fill="#c4431d"><rect id="rect1-6" x="118.37" y="6.6142" width="10.216" height="3.2745"/><rect id="rect1-2" transform="scale(-1,1)" x="-113.53" y="3.3398" width="5.3773" height="3.2745"/><rect id="rect1-2-9" transform="scale(-1,1)" x="-128.58" y="3.3398" width="5.3773" height="3.2745"/></g><g fill="#edcd34"><rect id="rect2" x="128.58" y=".065364" width="31.188" height="3.2745"/><rect id="rect2-4" x="121.59" y="9.8889" width="23.66" height="3.2745"/><rect id="rect2-3" transform="scale(-1,1)" x="-133.69" y="3.3398" width="5.1085" height="3.2745"/><rect id="rect2-3-4" transform="scale(-1,1)" x="-149.56" y="3.3398" width="4.8395" height="3.2745"/><rect id="rect2-3-8" x="128.58" y="6.6142" width="10.216" height="3.2745"/></g><g fill="#89ad30"><rect id="rect2-3-9" transform="scale(-1,1)" x="-138.8" y="3.3398" width="5.1085" height="3.2745"/><rect id="rect2-3-9-6" transform="scale(-1,1)" x="-149.56" y="6.6142" width="10.754" height="3.2745"/><rect id="rect2-3-9-6-8" x="149.56" y="3.3398" width="4.8395" height="3.2745"/></g><g fill="#439637"><rect id="rect2-3-9-3" x="138.8" y="3.3398" width="5.9151" height="3.2745"/><rect id="rect2-3-9-3-11" x="154.39" y="3.3398" width="5.3773" height="3.2745"/><rect id="rect2-3-9-3-1" x="149.56" y="6.6142" width="10.216" height="3.2745"/></g><g fill="#3cb1d4"><rect id="rect3" transform="scale(-1,1)" x="-193.65" y=".065366" width="33.876" height="3.2745"/><rect id="rect3-1" transform="scale(-1,1)" x="-169.18" y="9.8889" width="23.929" height="3.2745"/><rect id="rect3-6" transform="scale(-1,1)" x="-164.88" y="3.3398" width="5.1085" height="3.2745"/><rect id="rect3-6-74" transform="scale(-1,1)" x="-181.01" y="3.3398" width="5.7806" height="3.2745"/><rect id="rect3-6-1" transform="scale(-1,1)" x="-170.26" y="6.6142" width="10.485" height="3.2745"/></g><g fill="#444b89"><rect id="rect3-6-1-6" transform="scale(-1,1)" x="-181.01" y="6.6142" width="10.754" height="3.2745"/><rect id="rect3-6-7" transform="scale(-1,1)" x="-170.26" y="3.3398" width="5.3773" height="3.2745"/><rect id="rect3-6-7-8" transform="scale(-1,1)" x="-186.39" y="3.3398" width="5.3773" height="3.2745"/></g><g fill="#682e61"><rect id="rect3-6-7-3" transform="scale(-1,1)" x="-175.23" y="3.3398" width="4.9739" height="3.2745"/><rect id="rect3-6-7-3-2" transform="scale(-1,1)" x="-193.65" y="3.3398" width="7.2594" height="3.2745"/><rect id="rect3-6-7-3-1" transform="scale(-1,1)" x="-193.65" y="6.6142" width="12.636" height="3.2745"/></g></g><g id="g12" transform="matrix(.49975 0 0 .49504 78.289 -14.884)" fill="#2c2c2d" font-family="'Hiragino Kaku Gothic Pro'" font-size="4.9389px" text-anchor="middle"><g stroke-width=".26459"><text id="text7" x="54.640598" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan7" x="54.640598" y="48.517246">2</tspan><tspan id="tspan8" x="54.640598" y="48.517509"/></text><text id="text9" x="65.131317" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan9" x="65.131317" y="48.517246">3</tspan><tspan id="tspan10" x="65.131317" y="48.517509"/></text><text id="text11" x="75.353058" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan11" x="75.353058" y="48.517246">4</tspan><tspan id="tspan12" x="75.353058" y="48.517509"/></text><text id="text13" x="85.036797" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan13" x="85.036797" y="48.517246">5</tspan><tspan id="tspan14" x="85.036797" y="48.517509"/></text><text id="text15" x="95.258537" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan15" x="95.258537" y="48.517246">6</tspan><tspan id="tspan16" x="95.258537" y="48.517509"/></text></g><text id="text5" transform="matrix(2.0105 0 0 2.0105 -156.66 36.479)" x="99.477623" y="5.9877238" fill="#2c2c2d" font-family="'Hiragino Kaku Gothic Pro'" font-size="2.4566px" stroke-width=".1316" text-align="center" text-anchor="middle" style="line-height:0.000131197px" xml:space="preserve"><tspan id="tspan5" x="99.477623" y="5.9877238" style="line-height:0.000131197px">1</tspan><tspan id="tspan6" x="99.477623" y="5.9878545" style="line-height:0.000131197px"/></text><g stroke-width=".26459"><text id="text17" x="105.74928" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan17" x="105.74928" y="48.517246">7</tspan><tspan id="tspan18" x="105.74928" y="48.517509"/></text><text id="text19" x="115.97101" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan19" x="115.97101" y="48.517246">8</tspan><tspan id="tspan20" x="115.97101" y="48.517509"/></text><text id="text21" x="126.99973" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan21" x="126.99973" y="48.517246">9</tspan><tspan id="tspan22" x="126.99973" y="48.517509"/></text><text id="text23" x="137.75945" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan23" x="137.75945" y="48.517246">10</tspan><tspan id="tspan24" x="137.75945" y="48.517509"/></text><text id="text25" x="147.44319" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan25" x="147.44319" y="48.517246">11</tspan><tspan id="tspan26" x="147.44319" y="48.517509"/></text><text id="text27" x="157.66492" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan27" x="157.66492" y="48.517246" stroke="#2c2c2d" stroke-width=".26459">12</tspan></text><text id="text28" x="168.15565" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan28" x="168.15565" y="48.517246" stroke="#2c2c2d" stroke-width=".26459">13</tspan></text><text id="text29" x="178.64638" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan29" x="178.64638" y="48.517246" stroke="#2c2c2d" stroke-width=".26459">14</tspan></text><text id="text30" x="189.00259" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan30" x="189.00259" y="48.517246" stroke="#2c2c2d" stroke-width=".26459">15</tspan></text><text id="text31" x="199.76231" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan31" x="199.76231" y="48.517246" stroke="#2c2c2d" stroke-width=".26459">16</tspan></text><text id="text32" x="210.92552" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan32" x="210.92552" y="48.517246" stroke="#2c2c2d" stroke-width=".26459">17</tspan></text><text id="text33" x="223.56821" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan33" x="223.56821" y="48.517246" stroke="#2c2c2d" stroke-width=".26459">18</tspan></text></g></g></g><g id="g15-3" transform="matrix(1 0 0 1 -96.791 -2.5544e-5)"><g id="g14-2" transform="matrix(1 0 0 -1.0016 -.0018766 13.251)" stroke-width=".1316"><g fill="#ed88b4"><rect id="rect2-8-1" transform="scale(-1,1)" x="-103.04" y="3.3398" width="6.1839" height="3.2745"/><rect id="rect2-8-5-4" transform="scale(-1,1)" x="-118.37" y="3.3398" width="4.8395" height="3.2745"/><rect id="rect2-8-03-7" transform="scale(-1,1)" x="-108.15" y="6.6142" width="11.292" height="3.2745"/></g><g fill="#e76d2c"><rect id="rect2-8-0-6" x="103.04" y="3.3398" width="5.1085" height="3.2745"/><rect id="rect2-8-0-2-7" x="118.37" y="3.3398" width="4.8395" height="3.2745"/><rect id="rect2-8-0-1-1" transform="scale(-1,1)" x="-118.37" y="6.6142" width="10.216" height="3.2745"/></g><rect id="rect1-03" x="96.858" y=".065364" width="31.725" height="3.2745" fill="#c4431d"/><rect id="rect1-8-0" transform="scale(-1,1)" x="-121.59" y="9.8889" width="23.66" height="3.2745" fill="#c4431d"/><rect id="rect1-0-9" transform="scale(-1,1)" x="-97.934" y="9.8889" width="1.0754" height="3.2745" fill="#2c2c2d"/><rect id="rect1-0-7-0" x="169.18" y="9.8889" width="24.466" height="3.2744" fill="#2c2c2d"/><g fill="#c4431d"><rect id="rect1-6-2" x="118.37" y="6.6142" width="10.216" height="3.2745"/><rect id="rect1-2-1" transform="scale(-1,1)" x="-113.53" y="3.3398" width="5.3773" height="3.2745"/><rect id="rect1-2-9-6" transform="scale(-1,1)" x="-128.58" y="3.3398" width="5.3773" height="3.2745"/></g><g fill="#edcd34"><rect id="rect2-2" x="128.58" y=".065364" width="31.188" height="3.2745"/><rect id="rect2-4-0" x="121.59" y="9.8889" width="23.66" height="3.2745"/><rect id="rect2-3-94" transform="scale(-1,1)" x="-133.69" y="3.3398" width="5.1085" height="3.2745"/><rect id="rect2-3-4-8" transform="scale(-1,1)" x="-149.56" y="3.3398" width="4.8395" height="3.2745"/><rect id="rect2-3-8-6" x="128.58" y="6.6142" width="10.216" height="3.2745"/></g><g fill="#89ad30"><rect id="rect2-3-9-7" transform="scale(-1,1)" x="-138.8" y="3.3398" width="5.1085" height="3.2745"/><rect id="rect2-3-9-6-9" transform="scale(-1,1)" x="-149.56" y="6.6142" width="10.754" height="3.2745"/><rect id="rect2-3-9-6-8-0" x="149.56" y="3.3398" width="4.8395" height="3.2745"/></g><g fill="#439637"><rect id="rect2-3-9-3-9" x="138.8" y="3.3398" width="5.9151" height="3.2745"/><rect id="rect2-3-9-3-11-8" x="154.39" y="3.3398" width="5.3773" height="3.2745"/><rect id="rect2-3-9-3-1-3" x="149.56" y="6.6142" width="10.216" height="3.2745"/></g><g fill="#3cb1d4"><rect id="rect3-8" transform="scale(-1,1)" x="-193.65" y=".065366" width="33.876" height="3.2745"/><rect id="rect3-1-6" transform="scale(-1,1)" x="-169.18" y="9.8889" width="23.929" height="3.2745"/><rect id="rect3-6-16" transform="scale(-1,1)" x="-164.88" y="3.3398" width="5.1085" height="3.2745"/><rect id="rect3-6-74-8" transform="scale(-1,1)" x="-181.01" y="3.3398" width="5.7806" height="3.2745"/><rect id="rect3-6-1-0" transform="scale(-1,1)" x="-170.26" y="6.6142" width="10.485" height="3.2745"/></g><g fill="#444b89"><rect id="rect3-6-1-6-1" transform="scale(-1,1)" x="-181.01" y="6.6142" width="10.754" height="3.2745"/><rect id="rect3-6-7-9" transform="scale(-1,1)" x="-170.26" y="3.3398" width="5.3773" height="3.2745"/><rect id="rect3-6-7-8-1" transform="scale(-1,1)" x="-186.39" y="3.3398" width="5.3773" height="3.2745"/></g><g fill="#682e61"><rect id="rect3-6-7-3-7" transform="scale(-1,1)" x="-175.23" y="3.3398" width="4.9739" height="3.2745"/><rect id="rect3-6-7-3-2-4" transform="scale(-1,1)" x="-193.65" y="3.3398" width="7.2594" height="3.2745"/><rect id="rect3-6-7-3-1-6" transform="scale(-1,1)" x="-193.65" y="6.6142" width="12.636" height="3.2745"/></g></g><g id="g12-6" transform="matrix(.49975 0 0 .49504 78.289 -14.884)" fill="#2c2c2d" font-family="'Hiragino Kaku Gothic Pro'" font-size="4.9389px" text-anchor="middle"><g stroke-width=".26459"><text id="text7-8" x="54.640598" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan7-6" x="54.640598" y="48.517246">2</tspan><tspan id="tspan8-6" x="54.640598" y="48.517509"/></text><text id="text9-2" x="65.131317" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan9-9" x="65.131317" y="48.517246">3</tspan><tspan id="tspan10-9" x="65.131317" y="48.517509"/></text><text id="text11-9" x="75.353058" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan11-7" x="75.353058" y="48.517246">4</tspan><tspan id="tspan12-6" x="75.353058" y="48.517509"/></text><text id="text13-0" x="85.036797" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan13-6" x="85.036797" y="48.517246">5</tspan><tspan id="tspan14-1" x="85.036797" y="48.517509"/></text><text id="text15-6" x="95.258537" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan15-8" x="95.258537" y="48.517246">6</tspan><tspan id="tspan16-6" x="95.258537" y="48.517509"/></text></g><text id="text5-0" transform="matrix(2.0105 0 0 2.0105 -156.66 36.479)" x="99.477623" y="5.9877238" fill="#2c2c2d" font-family="'Hiragino Kaku Gothic Pro'" font-size="2.4566px" stroke-width=".1316" text-align="center" text-anchor="middle" style="line-height:0.000131197px" xml:space="preserve"><tspan id="tspan5-3" x="99.477623" y="5.9877238" style="line-height:0.000131197px">1</tspan><tspan id="tspan6-1" x="99.477623" y="5.9878545" style="line-height:0.000131197px"/></text><g stroke-width=".26459"><text id="text17-0" x="105.74928" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan17-4" x="105.74928" y="48.517246">7</tspan><tspan id="tspan18-8" x="105.74928" y="48.517509"/></text><text id="text19-7" x="115.97101" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan19-4" x="115.97101" y="48.517246">8</tspan><tspan id="tspan20-6" x="115.97101" y="48.517509"/></text><text id="text21-7" x="126.99973" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan21-9" x="126.99973" y="48.517246">9</tspan><tspan id="tspan22-5" x="126.99973" y="48.517509"/></text><text id="text23-7" x="137.75945" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan23-8" x="137.75945" y="48.517246">10</tspan><tspan id="tspan24-0" x="137.75945" y="48.517509"/></text><text id="text25-4" x="147.44319" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan25-0" x="147.44319" y="48.517246">11</tspan><tspan id="tspan26-8" x="147.44319" y="48.517509"/></text><text id="text27-0" x="157.66492" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan27-3" x="157.66492" y="48.517246" stroke="#2c2c2d" stroke-width=".26459">12</tspan></text><text id="text28-3" x="168.15565" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan28-1" x="168.15565" y="48.517246" stroke="#2c2c2d" stroke-width=".26459">13</tspan></text><text id="text29-3" x="178.64638" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan29-6" x="178.64638" y="48.517246" stroke="#2c2c2d" stroke-width=".26459">14</tspan></text><text id="text30-4" x="189.00259" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan30-2" x="189.00259" y="48.517246" stroke="#2c2c2d" stroke-width=".26459">15</tspan></text><text id="text31-9" x="199.76231" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan31-2" x="199.76231" y="48.517246" stroke="#2c2c2d" stroke-width=".26459">16</tspan></text><text id="text32-2" x="210.92552" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan32-1" x="210.92552" y="48.517246" stroke="#2c2c2d" stroke-width=".26459">17</tspan></text><text id="text33-5" x="223.56821" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan33-5" x="223.56821" y="48.517246" stroke="#2c2c2d" stroke-width=".26459">18</tspan></text></g></g></g><g id="g15-3-4" transform="matrix(1 0 0 1 96.792 2.4743e-5)"><g id="g14-2-0" transform="matrix(1 0 0 -1.0016 -.0018766 13.251)" stroke-width=".1316"><g fill="#ed88b4"><rect id="rect2-8-1-6" transform="scale(-1,1)" x="-103.04" y="3.3398" width="6.1839" height="3.2745"/><rect id="rect2-8-5-4-3" transform="scale(-1,1)" x="-118.37" y="3.3398" width="4.8395" height="3.2745"/><rect id="rect2-8-03-7-8" transform="scale(-1,1)" x="-108.15" y="6.6142" width="11.292" height="3.2745"/></g><g fill="#e76d2c"><rect id="rect2-8-0-6-6" x="103.04" y="3.3398" width="5.1085" height="3.2745"/><rect id="rect2-8-0-2-7-3" x="118.37" y="3.3398" width="4.8395" height="3.2745"/><rect id="rect2-8-0-1-1-9" transform="scale(-1,1)" x="-118.37" y="6.6142" width="10.216" height="3.2745"/></g><rect id="rect1-03-3" x="96.858" y=".065364" width="31.725" height="3.2745" fill="#c4431d"/><rect id="rect1-8-0-6" transform="scale(-1,1)" x="-121.59" y="9.8889" width="23.66" height="3.2745" fill="#c4431d"/><rect id="rect1-0-9-8" transform="scale(-1,1)" x="-97.934" y="9.8889" width="1.0754" height="3.2745" fill="#2c2c2d"/><rect id="rect1-0-7-0-1" x="169.18" y="9.8889" width="24.466" height="3.2744" fill="#2c2c2d"/><g fill="#c4431d"><rect id="rect1-6-2-9" x="118.37" y="6.6142" width="10.216" height="3.2745"/><rect id="rect1-2-1-9" transform="scale(-1,1)" x="-113.53" y="3.3398" width="5.3773" height="3.2745"/><rect id="rect1-2-9-6-1" transform="scale(-1,1)" x="-128.58" y="3.3398" width="5.3773" height="3.2745"/></g><g fill="#edcd34"><rect id="rect2-2-5" x="128.58" y=".065364" width="31.188" height="3.2745"/><rect id="rect2-4-0-3" x="121.59" y="9.8889" width="23.66" height="3.2745"/><rect id="rect2-3-94-8" transform="scale(-1,1)" x="-133.69" y="3.3398" width="5.1085" height="3.2745"/><rect id="rect2-3-4-8-2" transform="scale(-1,1)" x="-149.56" y="3.3398" width="4.8395" height="3.2745"/><rect id="rect2-3-8-6-8" x="128.58" y="6.6142" width="10.216" height="3.2745"/></g><g fill="#89ad30"><rect id="rect2-3-9-7-1" transform="scale(-1,1)" x="-138.8" y="3.3398" width="5.1085" height="3.2745"/><rect id="rect2-3-9-6-9-9" transform="scale(-1,1)" x="-149.56" y="6.6142" width="10.754" height="3.2745"/><rect id="rect2-3-9-6-8-0-1" x="149.56" y="3.3398" width="4.8395" height="3.2745"/></g><g fill="#439637"><rect id="rect2-3-9-3-9-3" x="138.8" y="3.3398" width="5.9151" height="3.2745"/><rect id="rect2-3-9-3-11-8-3" x="154.39" y="3.3398" width="5.3773" height="3.2745"/><rect id="rect2-3-9-3-1-3-0" x="149.56" y="6.6142" width="10.216" height="3.2745"/></g><g fill="#3cb1d4"><rect id="rect3-8-3" transform="scale(-1,1)" x="-193.65" y=".065366" width="33.876" height="3.2745"/><rect id="rect3-1-6-2" transform="scale(-1,1)" x="-169.18" y="9.8889" width="23.929" height="3.2745"/><rect id="rect3-6-16-6" transform="scale(-1,1)" x="-164.88" y="3.3398" width="5.1085" height="3.2745"/><rect id="rect3-6-74-8-0" transform="scale(-1,1)" x="-181.01" y="3.3398" width="5.7806" height="3.2745"/><rect id="rect3-6-1-0-6" transform="scale(-1,1)" x="-170.26" y="6.6142" width="10.485" height="3.2745"/></g><g fill="#444b89"><rect id="rect3-6-1-6-1-2" transform="scale(-1,1)" x="-181.01" y="6.6142" width="10.754" height="3.2745"/><rect id="rect3-6-7-9-6" transform="scale(-1,1)" x="-170.26" y="3.3398" width="5.3773" height="3.2745"/><rect id="rect3-6-7-8-1-2" transform="scale(-1,1)" x="-186.39" y="3.3398" width="5.3773" height="3.2745"/></g><g fill="#682e61"><rect id="rect3-6-7-3-7-4" transform="scale(-1,1)" x="-175.23" y="3.3398" width="4.9739" height="3.2745"/><rect id="rect3-6-7-3-2-4-2" transform="scale(-1,1)" x="-193.65" y="3.3398" width="7.2594" height="3.2745"/><rect id="rect3-6-7-3-1-6-6" transform="scale(-1,1)" x="-193.65" y="6.6142" width="12.636" height="3.2745"/></g></g><g id="g12-6-0" transform="matrix(.49975 0 0 .49504 78.289 -14.884)" fill="#2c2c2d" font-family="'Hiragino Kaku Gothic Pro'" font-size="4.9389px" text-anchor="middle"><g stroke-width=".26459"><text id="text7-8-9" x="54.640598" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan7-6-2" x="54.640598" y="48.517246">2</tspan><tspan id="tspan8-6-4" x="54.640598" y="48.517509"/></text><text id="text9-2-5" x="65.131317" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan9-9-2" x="65.131317" y="48.517246">3</tspan><tspan id="tspan10-9-2" x="65.131317" y="48.517509"/></text><text id="text11-9-4" x="75.353058" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan11-7-9" x="75.353058" y="48.517246">4</tspan><tspan id="tspan12-6-3" x="75.353058" y="48.517509"/></text><text id="text13-0-7" x="85.036797" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan13-6-7" x="85.036797" y="48.517246">5</tspan><tspan id="tspan14-1-5" x="85.036797" y="48.517509"/></text><text id="text15-6-4" x="95.258537" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan15-8-3" x="95.258537" y="48.517246">6</tspan><tspan id="tspan16-6-6" x="95.258537" y="48.517509"/></text></g><text id="text5-0-4" transform="matrix(2.0105 0 0 2.0105 -156.66 36.479)" x="99.477623" y="5.9877238" fill="#2c2c2d" font-family="'Hiragino Kaku Gothic Pro'" font-size="2.4566px" stroke-width=".1316" text-align="center" text-anchor="middle" style="line-height:0.000131197px" xml:space="preserve"><tspan id="tspan5-3-4" x="99.477623" y="5.9877238" style="line-height:0.000131197px">1</tspan><tspan id="tspan6-1-8" x="99.477623" y="5.9878545" style="line-height:0.000131197px"/></text><g stroke-width=".26459"><text id="text17-0-1" x="105.74928" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan17-4-6" x="105.74928" y="48.517246">7</tspan><tspan id="tspan18-8-0" x="105.74928" y="48.517509"/></text><text id="text19-7-2" x="115.97101" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan19-4-2" x="115.97101" y="48.517246">8</tspan><tspan id="tspan20-6-4" x="115.97101" y="48.517509"/></text><text id="text21-7-9" x="126.99973" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan21-9-5" x="126.99973" y="48.517246">9</tspan><tspan id="tspan22-5-7" x="126.99973" y="48.517509"/></text><text id="text23-7-2" x="137.75945" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan23-8-0" x="137.75945" y="48.517246">10</tspan><tspan id="tspan24-0-6" x="137.75945" y="48.517509"/></text><text id="text25-4-7" x="147.44319" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan25-0-6" x="147.44319" y="48.517246">11</tspan><tspan id="tspan26-8-0" x="147.44319" y="48.517509"/></text><text id="text27-0-6" x="157.66492" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan27-3-0" x="157.66492" y="48.517246" stroke="#2c2c2d" stroke-width=".26459">12</tspan></text><text id="text28-3-3" x="168.15565" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan28-1-1" x="168.15565" y="48.517246" stroke="#2c2c2d" stroke-width=".26459">13</tspan></text><text id="text29-3-4" x="178.64638" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan29-6-5" x="178.64638" y="48.517246" stroke="#2c2c2d" stroke-width=".26459">14</tspan></text><text id="text30-4-7" x="189.00259" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan30-2-2" x="189.00259" y="48.517246" stroke="#2c2c2d" stroke-width=".26459">15</tspan></text><text id="text31-9-2" x="199.76231" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan31-2-1" x="199.76231" y="48.517246" stroke="#2c2c2d" stroke-width=".26459">16</tspan></text><text id="text32-2-8" x="210.92552" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan32-1-5" x="210.92552" y="48.517246" stroke="#2c2c2d" stroke-width=".26459">17</tspan></text><text id="text33-5-7" x="223.56821" y="48.517246" text-align="center" style="line-height:0.000263766px" xml:space="preserve"><tspan id="tspan33-5-8" x="223.56821" y="48.517246" stroke="#2c2c2d" stroke-width=".26459">18</tspan></text></g></g></g></g></svg>
+        `;
+      const medical_data = [
+        {
+          year: 1917,
+          date: "02-25",
+        },
+        {
+          year: 1918,
+          date: "03-17",
+        },
+        {
+          year: 1919,
+          date: "03-05",
+        },
+        {
+          year: 1920,
+          date: "03-24",
+        },
+        {
+          year: 1921,
+          date: "03-13",
+        },
+        {
+          year: 1922,
+          date: "03-02",
+        },
+        {
+          year: 1923,
+          date: "03-20",
+        },
+        {
+          year: 1924,
+          date: "03-09",
+        },
+        {
+          year: 1925,
+          date: "02-27",
+        },
+        {
+          year: 1926,
+          date: "03-18",
+        },
+        {
+          year: 1927,
+          date: "03-06",
+        },
+        {
+          year: 1928,
+          date: "03-25",
+        },
+        {
+          year: 1929,
+          date: "03-14",
+        },
+        {
+          year: 1930,
+          date: "03-04",
+        },
+        {
+          year: 1931,
+          date: "03-22",
+        },
+        {
+          year: 1932,
+          date: "03-11",
+        },
+        {
+          year: 1933,
+          date: "02-28",
+        },
+        {
+          year: 1934,
+          date: "03-20",
+        },
+        {
+          year: 1935,
+          date: "03-08",
+        },
+        {
+          year: 1936,
+          date: "02-25",
+        },
+        {
+          year: 1937,
+          date: "03-16",
+        },
+        {
+          year: 1938,
+          date: "03-05",
+        },
+        {
+          year: 1939,
+          date: "03-24",
+        },
+        {
+          year: 1940,
+          date: "03-13",
+        },
+        {
+          year: 1941,
+          date: "03-13",
+        },
+        {
+          year: 1942,
+          date: "03-02",
+        },
+        {
+          year: 1943,
+          date: "03-21",
+        },
+        {
+          year: 1944,
+          date: "03-09",
+        },
+        {
+          year: 1945,
+          date: "02-26",
+        },
+        {
+          year: 1946,
+          date: "03-18",
+        },
+        {
+          year: 1947,
+          date: "03-07",
+        },
+        {
+          year: 1948,
+          date: "03-25",
+        },
+        {
+          year: 1949,
+          date: "03-14",
+        },
+        {
+          year: 1950,
+          date: "03-03",
+        },
+        {
+          year: 1951,
+          date: "03-23",
+        },
+        {
+          year: 1952,
+          date: "03-11",
+        },
+        {
+          year: 1953,
+          date: "02-28",
+        },
+        {
+          year: 1954,
+          date: "03-19",
+        },
+        {
+          year: 1955,
+          date: "03-08",
+        },
+        {
+          year: 1956,
+          date: "02-26",
+        },
+        {
+          year: 1957,
+          date: "03-16",
+        },
+        {
+          year: 1958,
+          date: "03-05",
+        },
+        {
+          year: 1959,
+          date: "03-24",
+        },
+        {
+          year: 1960,
+          date: "03-12",
+        },
+        {
+          year: 1961,
+          date: "03-01",
+        },
+        {
+          year: 1962,
+          date: "03-21",
+        },
+        {
+          year: 1963,
+          date: "03-10",
+        },
+        {
+          year: 1964,
+          date: "02-27",
+        },
+        {
+          year: 1965,
+          date: "03-17",
+        },
+        {
+          year: 1966,
+          date: "03-06",
+        },
+        {
+          year: 1967,
+          date: "03-26",
+        },
+        {
+          year: 1968,
+          date: "03-14",
+        },
+        {
+          year: 1969,
+          date: "03-03",
+        },
+        {
+          year: 1970,
+          date: "03-22",
+        },
+        {
+          year: 1971,
+          date: "03-11",
+        },
+        {
+          year: 1972,
+          date: "03-29",
+        },
+        {
+          year: 1973,
+          date: "03-19",
+        },
+        {
+          year: 1974,
+          date: "03-08",
+        },
+        {
+          year: 1975,
+          date: "03-27",
+        },
+        {
+          year: 1976,
+          date: "03-15",
+        },
+        {
+          year: 1977,
+          date: "03-04",
+        },
+        {
+          year: 1978,
+          date: "03-24",
+        },
+        {
+          year: 1979,
+          date: "03-13",
+        },
+        {
+          year: 1980,
+          date: "03-01",
+        },
+        {
+          year: 1981,
+          date: "03-21",
+        },
+        {
+          year: 1982,
+          date: "03-10",
+        },
+        {
+          year: 1983,
+          date: "02-27",
+        },
+        {
+          year: 1984,
+          date: "02-17",
+        },
+        {
+          year: 1985,
+          date: "03-06",
+        },
+        {
+          year: 1986,
+          date: "03-25",
+        },
+        {
+          year: 1987,
+          date: "03-14",
+        },
+        {
+          year: 1988,
+          date: "03-03",
+        },
+        {
+          year: 1989,
+          date: "03-22",
+        },
+        {
+          year: 1990,
+          date: "03-11",
+        },
+        {
+          year: 1991,
+          date: "02-28",
+        },
+        {
+          year: 1992,
+          date: "03-19",
+        },
+        {
+          year: 1993,
+          date: "03-08",
+        },
+        {
+          year: 1994,
+          date: "03-27",
+        },
+        {
+          year: 1995,
+          date: "03-16",
+        },
+        {
+          year: 1996,
+          date: "03-04",
+        },
+        {
+          year: 1997,
+          date: "03-24",
+        },
+        {
+          year: 1998,
+          date: "03-13",
+        },
+        {
+          year: 1999,
+          date: "03-02",
+        },
+        {
+          year: 2000,
+          date: "03-20",
+        },
+        {
+          year: 2001,
+          date: "03-09",
+        },
+        {
+          year: 2002,
+          date: "03-01",
+        },
+        {
+          year: 2003,
+          date: "03-18",
+        },
+        {
+          year: 2004,
+          date: "03-06",
+        },
+        {
+          year: 2005,
+          date: "03-25",
+        },
+        {
+          year: 2006,
+          date: "03-14",
+        },
+        {
+          year: 2007,
+          date: "03-03",
+        },
+        {
+          year: 2008,
+          date: "03-22",
+        },
+        {
+          year: 2009,
+          date: "03-11",
+        },
+        {
+          year: 2010,
+          date: "02-28",
+        },
+        {
+          year: 2011,
+          date: "03-19",
+        },
+        {
+          year: 2012,
+          date: "03-07",
+        },
+        {
+          year: 2013,
+          date: "03-27",
+        },
+        {
+          year: 2014,
+          date: "03-16",
+        },
+        {
+          year: 2015,
+          date: "03-05",
+        },
+        {
+          year: 2016,
+          date: "03-23",
+        },
+        {
+          year: 2017,
+          date: "03-12",
+        },
+        {
+          year: 2018,
+          date: "03-02",
+        },
+        {
+          year: 2019,
+          date: "03-21",
+        },
+        {
+          year: 2020,
+          date: "03-09",
+        },
+        {
+          year: 2021,
+          date: "02-26",
+        },
+        {
+          year: 2022,
+          date: "03-18",
+        },
+        {
+          year: 2023,
+          date: "03-07",
+        },
+        {
+          year: 2024,
+          date: "03-25",
+        },
+        {
+          year: 2025,
+          date: "03-14",
+        },
+        {
+          year: 2026,
+          date: "03-03",
+        },
+        {
+          year: 2027,
+          date: "03-22",
+        },
+        {
+          year: 2028,
+          date: "03-10",
+        },
+        {
+          year: 2029,
+          date: "02-28",
+        },
+        {
+          year: 2030,
+          date: "03-19",
+        },
+        {
+          year: 2031,
+          date: "03-08",
+        },
+        {
+          year: 2032,
+          date: "03-26",
+        },
+        {
+          year: 2033,
+          date: "03-15",
+        },
+        {
+          year: 2034,
+          date: "03-05",
+        },
+        {
+          year: 2035,
+          date: "03-24",
+        },
+        {
+          year: 2036,
+          date: "03-12",
+        },
+        {
+          year: 2037,
+          date: "03-01",
+        },
+        {
+          year: 2038,
+          date: "03-21",
+        },
+        {
+          year: 2039,
+          date: "03-10",
+        },
+        {
+          year: 2040,
+          date: "02-27",
+        },
+        {
+          year: 2041,
+          date: "03-17",
+        },
+        {
+          year: 2042,
+          date: "03-06",
+        },
+      ];
+      const default_time = " 00:00:00";
+      let img_x_position = -1464; // 初期x座標
+      let img_y_position = 0; // 初期x座標
+      const img_x_size = 4392; // 画像サイズ
+      const img_y_size = 200; // 画像サイズ
+      const canvas_half = 50;
+
+      const canvas = document.getElementById("app_canvas");
+      const ctx = canvas.getContext("2d");
+
+      // SVGをImageオブジェクトに変換
+      const img = new Image();
+      const svg_blob = new Blob([svg_data], { type: "image/svg+xml" });
+      const url = URL.createObjectURL(svg_blob);
+      img.src = url;
+
+      //imgを描写
+      const DrawImage = () => {
+        console.log(img);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(
+          img,
+          img_x_position,
+          img_y_position,
+          img_x_size,
+          img_y_size
+        );
+      };
+
+      const Execution = () => {
+        const birthday = document.getElementById("birthday").value;
+        const birth = FromDate(birthday + default_time);
+        const medical = Medical(birthday);
+        const amount = -birth + medical - 89;
+        console.log(amount, birth, medical);
+        Move(amount * 4 + canvas_half);
+      };
+
+      const Medical = (value) => {
+        const birthday = new Date(value);
+        const birthday_year = birthday.getFullYear();
+        const date = medical_data.find(({ year }) => year === birthday_year);
+        if (date) {
+          const days = FromDate(date.date + default_time);
+          return days;
+        }
+      };
+
+      const Move = (amount) => {
+        img_x_position = amount;
+        console.log(amount);
+        DrawImage();
+      };
+
+      //一月一日との差を計算してreturnする.
+      const FromDate = (date) => {
+        const birthday = new Date(date);
+        const new_years_day = new Date(
+          `${birthday.getFullYear()}-01-01 ${default_time}`
+        );
+        return (birthday - new_years_day) / 86400000;
+      };
+    </script>
+  </body>
+</html>
