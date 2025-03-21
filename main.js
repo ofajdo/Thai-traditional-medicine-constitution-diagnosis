@@ -535,7 +535,7 @@ const Execution = () => {
   const birthday = document.getElementById("birthday").value;
   const birth = FromDate(birthday + default_time);
   const medical = Medical(birthday);
-  const amount = -birth + medical - 89;
+  const amount = 366 - birth + medical - 89;
   console.log(amount, birth, medical);
   Move(amount * 4 + canvas_half);
 };
