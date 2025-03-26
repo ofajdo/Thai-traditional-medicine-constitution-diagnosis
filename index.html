@@ -86,6 +86,7 @@
       <div class="app-display-main">
         <canvas id="app_canvas" width="150" height="300"></canvas>
       </div>
+      <a href="#" id="download">ダウンロード</a>
     </div>
 
     <script>
@@ -673,6 +674,23 @@
         );
         return (birthday - new_years_day) / 86400000;
       };
+
+      const DownLoad = () => {
+        // CanvasからデータURLを生成（PNG形式）
+        const dataURL = canvas.toDataURL("image/png");
+
+        // ダウンロードリンクを作成
+        const link = document.createElement("a");
+        link.download = "canvas-image.png"; // ダウンロード時のファイル名
+        link.href = dataURL;
+
+        // リンクをクリックしてダウンロードを実行
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      };
+
+      document.getElementById("download").addEventListener("click", DownLoad);
     </script>
   </body>
 </html>
