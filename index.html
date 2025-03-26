@@ -16,10 +16,12 @@
         padding: 0;
         box-sizing: border-box;
       }
+      html {
+        font-size: 18px;
+      }
       body {
         font-family: var(--font-family);
         color: var(--text-color);
-        font-size: 16px;
         background-color: var(--background-color);
       }
       canvas {
@@ -76,12 +78,13 @@
         <p><label for="birthday">日付を入力</label></p>
         <input type="date" id="birthday" />
       </div>
+      <p id="caveat" class="caveat"></p>
       <button onclick="Execution();" id="execution" class="execution-button">
         実行
       </button>
       <!--結果が描写されるところ-->
       <div class="app-display-main">
-        <canvas id="app_canvas" width="100" height="200"></canvas>
+        <canvas id="app_canvas" width="150" height="300"></canvas>
       </div>
     </div>
 
@@ -598,11 +601,12 @@
         },
       ];
       const default_time = "T00:00:00";
-      let img_x_position = -1464; // 初期x座標.
+      let img_x_position = -2196; // 初期x座標.
       let img_y_position = 0; // 初期x座標.
-      const img_x_size = 4392; // 画像サイズ.
-      const img_y_size = 200; // 画像サイズ.
-      const canvas_half = 50;
+      const img_x_size = 6588; // 画像サイズ.
+      const img_y_size = 300; // 画像サイズ.
+      const canvas_half = 75;
+      let caveat;
 
       const canvas = document.getElementById("app_canvas");
       const ctx = canvas.getContext("2d");
@@ -627,11 +631,19 @@
 
       //ボタンを押した時の動作.
       const Execution = () => {
+        caveat = "";
         const date = document.getElementById("birthday").value;
-        const birth = FromDate(date + default_time);
-        const medical = Medical(date);
-        const amount = medical - birth - 455;
-        Move(amount * 4 + canvas_half);
+        console.log(date);
+        if (date !== "") {
+          const birth = FromDate(date + default_time);
+          const medical = Medical(date);
+          const amount = medical - birth - 455;
+          Move(amount * 6 + canvas_half);
+        } else {
+          caveat += "日付を入力してください<br/>";
+        }
+
+        document.getElementById("caveat").innerHTML = caveat;
       };
 
       //裏面のものを計算する.
@@ -642,6 +654,8 @@
         if (date) {
           const days = FromDate("2024-" + date.date + default_time);
           return days;
+        } else {
+          caveat += "西暦1917年〜2042年の範囲で入力してください。<br/>";
         }
       };
 
