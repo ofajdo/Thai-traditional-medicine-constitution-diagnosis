@@ -653,7 +653,7 @@
         const birthday_year = birthday.getFullYear();
         const date = medical_data.find(({ year }) => year === birthday_year);
         if (date) {
-          const days = FromDate("2024-" + date.date + default_time);
+          const days = FromDate(birthday_year + "-" + date.date + default_time);
           return days;
         } else {
           caveat += "西暦1917年〜2042年の範囲で入力してください。<br/>";
