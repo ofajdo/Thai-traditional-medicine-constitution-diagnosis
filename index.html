@@ -86,7 +86,7 @@
       <div class="app-display-main">
         <canvas id="app_canvas" width="150" height="300"></canvas>
       </div>
-      <a href="#" id="download" download="10">ダウンロード</a>
+      <a href="#" id="download">ダウンロード</a>
     </div>
 
     <script>
@@ -634,7 +634,6 @@
       const Execution = () => {
         caveat = "";
         const date = document.getElementById("birthday").value;
-        console.log(date);
         if (date !== "") {
           const birth = FromDate(date + default_time);
           const medical = Medical(date);
@@ -644,6 +643,7 @@
           caveat += "日付を入力してください<br/>";
         }
 
+        DownLoad();
         document.getElementById("caveat").innerHTML = caveat;
       };
 
@@ -680,17 +680,10 @@
         const dataURL = canvas.toDataURL("image/png");
 
         // ダウンロードリンクを作成
-        const link = document.createElement("a");
-        link.download = "canvas-image.png"; // ダウンロード時のファイル名
+        const link = document.getElementById("download");
+        link.download = "result.png"; // ダウンロード時のファイル名
         link.href = dataURL;
-
-        // リンクをクリックしてダウンロードを実行
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
       };
-
-      document.getElementById("download").addEventListener("click", DownLoad);
     </script>
   </body>
 </html>
