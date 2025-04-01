@@ -26,7 +26,7 @@
       }
       canvas {
         background-color: var(--background-gray);
-        border: #2c2c2d solid 1px;
+        max-width: 100%;
       }
       .app-display {
         display: flex;
@@ -34,7 +34,7 @@
         align-items: center;
         padding: 30px 10px;
         overflow: scroll;
-        row-gap: 20px;
+        row-gap: 15px;
       }
       .app-display-main {
         padding: 10px;
@@ -63,6 +63,20 @@
           0 4px 8px -4px rgba(0, 0, 0, 0.2);
         color: #f7f7f7;
       }
+
+      input {
+        width: 200px;
+        max-width: 100%;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      .caveat {
+        font-weight: 700;
+      }
+
       .execution-button:hover {
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1),
           0 12px 24px -12px rgba(0, 0, 0, 0.2);
@@ -73,6 +87,11 @@
   </head>
   <body>
     <div class="app-display">
+      <h1>タイエレメント体質診断</h1>
+      <div class="app-name-form">
+        <p><label for="name">名前</label></p>
+        <input type="text" id="name" />
+      </div>
       <!--日付を入力するところ-->
       <div class="app-date-form">
         <p><label for="birthday">日付を入力</label></p>
@@ -80,13 +99,12 @@
       </div>
       <p id="caveat" class="caveat"></p>
       <button onclick="Execution();" id="execution" class="execution-button">
-        実行
+        診断
       </button>
       <!--結果が描写されるところ-->
       <div class="app-display-main">
-        <canvas id="app_canvas" width="150" height="300"></canvas>
+        <canvas id="app_canvas" width="350" height="300"></canvas>
       </div>
-      <a id="download">ダウンロード</a>
     </div>
 
     <script>
@@ -602,15 +620,15 @@
         },
       ];
       const default_time = "T00:00:00";
+      const canvas = document.getElementById("app_canvas");
+      const ctx = canvas.getContext("2d");
+
       let img_x_position = -2196; // 初期x座標.
       let img_y_position = 0; // 初期x座標.
       const img_x_size = 6588; // 画像サイズ.
       const img_y_size = 300; // 画像サイズ.
-      const canvas_half = 75;
+      const canvas_half = canvas.width / 2;
       let caveat;
-
-      const canvas = document.getElementById("app_canvas");
-      const ctx = canvas.getContext("2d");
 
       // SVGをImageオブジェクトに変換.
       const img = new Image();
@@ -630,20 +648,32 @@
         );
       };
 
+      const DrawRect = () => {
+        ctx.strokeStyle = "#2C2C2D"; // 線の色を設定
+        ctx.lineWidth = 6; // 線の太さを5pxに設定
+        ctx.fillStyle = "#2C2C2D44";
+
+        ctx.fillRect(0, 0, 100, canvas.height);
+        ctx.fillRect(canvas.width - 100, 0, 100, canvas.height);
+        ctx.strokeRect(0, 0, canvas.width, canvas.height);
+      };
+
       //ボタンを押した時の動作.
       const Execution = () => {
         caveat = "";
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
         const date = document.getElementById("birthday").value;
         if (date !== "") {
           const birth = FromDate(date + default_time);
           const medical = Medical(date);
           const amount = medical - birth - 455;
           Move(amount * 6 + canvas_half);
+          DrawRect();
         } else {
           caveat += "日付を入力してください<br/>";
         }
 
-        DownLoad();
         document.getElementById("caveat").innerHTML = caveat;
       };
 
@@ -673,16 +703,6 @@
           `${birthday.getFullYear()}-01-01${default_time}`
         );
         return (birthday - new_years_day) / 86400000;
-      };
-
-      const DownLoad = () => {
-        // CanvasからデータURLを生成（PNG形式）
-        const dataURL = canvas.toDataURL("image/png");
-
-        // ダウンロードリンクを作成
-        const link = document.getElementById("download");
-        link.download = "result.png"; // ダウンロード時のファイル名
-        link.href = dataURL;
       };
     </script>
   </body>
